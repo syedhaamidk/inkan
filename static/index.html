@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inkan 印鑑: a drafting table for TLS trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600&family=Libre+Caslon+Display&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css"><link rel="stylesheet" href="/components.css"><link rel="stylesheet" href="/style.css">
+</head><body>
+<a class="skip-link" href="#ca">Skip to the workbench</a>
+<div class="scroll-rule" id="rule" aria-hidden="true"></div>
+<div id="ring" aria-hidden="true"><div class="rb"></div><span id="cl"></span></div>
+<div class="container">
+<div class="utility-bar"><span class="mono brandmark">INKAN <span class="jp">印鑑</span></span>
+  <ul class="utility-links" id="steps"><li><a href="#ca" data-k="ca">01 Authority</a></li><li><a href="#issue" data-k="issue">02 Certificate</a></li><li><a href="#check" data-k="check">03 Inspection</a></li><li><a href="#lab" data-k="lab">04 Gauntlet</a></li></ul>
+  <button class="btn btn-secondary btn-sm" id="theme" data-cur="theme" aria-pressed="false">Dark sheet</button></div>
+
+<header class="titleblock reg-corners draw-in reveal">
+  <div class="titleblock-main"><span class="hanko" aria-hidden="true">印</span><span class="sheet-label">Sheet 00 · Overview</span>
+    <h1 class="h1">Trust, stamped one signature at a time.</h1>
+    <p class="text-soft lead">Be the certificate authority. Sign a website, then watch a TLS handshake decide whether to believe it.</p></div>
+  <div class="tb-cells">
+    <div class="titleblock-cell"><span class="tb-label">PROTOCOL</span><span class="tb-value">TLS 1.3</span></div>
+    <div class="titleblock-cell"><span class="tb-label">KEYS · HASH</span><span class="tb-value">P-256 · SHA-256</span></div>
+    <div class="titleblock-cell"><span class="tb-label">PROGRESS</span><span class="tb-value" id="prog-n">0 / 4</span><div class="progress" id="prog"><i></i></div></div>
+  </div>
+</header>
+
+<section class="card reg-corners hs reveal-on-scroll" aria-label="TLS 1.3 handshake figure">
+  <span class="sheet-label">Fig. 1 · One handshake, message by message</span>
+  <div class="track" id="track"><div class="node mono">Browser</div><div class="wire"><span id="wire-note" class="mono">unencrypted</span></div><div class="node mono">Server</div><div class="packet" id="packet"></div></div>
+  <p class="cap" id="cap" aria-live="polite">Press play to follow the handshake. A dashed line means readable by anyone; a solid line means encrypted.</p>
+  <div class="row"><button class="btn btn-primary" id="hs-play" data-cur="play">Play handshake</button><button class="btn btn-secondary" id="hs-next" data-cur="step">Next message</button><div class="dots" id="dots"></div></div>
+</section>
+
+<main>
+<div class="dim-divider"><span class="dim-divider-label">SHEET 01</span><div class="dim-divider-line"></div></div>
+<section id="ca" class="step reveal-on-scroll"><div class="step-txt stack"><span class="sheet-label">Sheet 01 · Authority</span><h2 class="h2">Become an authority</h2>
+  <p class="text-soft">A certificate authority is the one party everybody agrees to trust. Its signature is what makes a website believable.</p>
+  <div class="field"><label class="label" for="ca-name">Authority name</label><input class="input" id="ca-name" value="Inkan Root CA" maxlength="60"></div>
+  <button class="btn btn-primary" id="ca-go" data-cur="create">Create authority</button></div>
+  <div id="ca-out" class="step-out"><div class="empty"><p class="empty-title">No authority yet</p><p>Create one and its certificate is drawn here.</p></div></div></section>
+
+<div class="dim-divider"><span class="dim-divider-label">SHEET 02</span><div class="dim-divider-line"></div></div>
+<section id="issue" class="step reveal-on-scroll"><div class="step-txt stack"><span class="sheet-label">Sheet 02 · Certificate</span><h2 class="h2">Sign a certificate</h2>
+  <p class="text-soft">Pick a website name and put your seal on it. Backdate it to see how an expired certificate fails later.</p>
+  <div class="field"><label class="label" for="host">Website name</label><input class="input" id="host" value="shop.example.com"></div>
+  <div class="field"><label class="label" for="days">Valid for (days)</label><input class="input" id="days" type="number" min="1" max="365" value="30"></div>
+  <label class="chk"><input class="checkbox" id="expired" type="checkbox"> Make it already expired</label>
+  <button class="btn btn-primary" id="issue-go" data-cur="sign">Sign certificate</button></div>
+  <div id="issue-out" class="step-out"><div class="empty"><p class="empty-title">Nothing signed</p><p>Create an authority first, then sign here.</p></div></div></section>
+
+<div class="dim-divider"><span class="dim-divider-label">SHEET 03</span><div class="dim-divider-line"></div></div>
+<section id="check" class="step reveal-on-scroll"><div class="step-txt stack"><span class="sheet-label">Sheet 03 · Inspection</span><h2 class="h2">Inspect like a browser</h2>
+  <p class="text-soft">Signature, dates, name. Sheets 01 and 02 fill the boxes. Tamper with the certificate and watch the signature break.</p>
+  <div class="field"><label class="label" for="leaf-pem">Server certificate</label><textarea class="textarea" id="leaf-pem" rows="4" spellcheck="false" data-cur="read"></textarea></div>
+  <div class="field"><label class="label" for="ca-pem">Authority you trust</label><textarea class="textarea" id="ca-pem" rows="4" spellcheck="false" data-cur="read"></textarea></div>
+  <div class="field"><label class="label" for="visit">Website you are visiting</label><input class="input" id="visit" value="shop.example.com"></div>
+  <div class="row"><button class="btn btn-primary" id="check-go" data-cur="inspect">Inspect</button><button class="btn btn-secondary" id="tamper" data-cur="tamper">Tamper with it</button><button class="btn btn-secondary" id="swap" data-cur="swap">Trust another authority</button><button class="btn btn-ghost" id="restore" data-cur="restore">Restore</button></div></div>
+  <div id="check-out" class="step-out"><div class="empty"><p class="empty-title">No verdict yet</p><p>Inspect a certificate to see the checks.</p></div></div></section>
+
+<div class="dim-divider"><span class="dim-divider-label">SHEET 04</span><div class="dim-divider-line"></div></div>
+<section id="lab" class="step reveal-on-scroll"><div class="step-txt stack"><span class="sheet-label">Sheet 04 · Gauntlet</span><h2 class="h2">The gauntlet</h2>
+  <p class="text-soft">The server starts a real TLS endpoint and a client knocks five times, each with a different certificate problem.</p>
+  <button class="btn btn-primary" id="lab-go" data-cur="run">Run five handshakes</button></div>
+  <div id="lab-out" class="step-out"><div class="empty"><p class="empty-title">Five gates, closed</p><p>Run the handshakes to open them.</p></div></div></section>
+</main>
+<footer class="foot mono">Learning tool. Keys are generated for practice and shown in your browser. Never paste real private keys.</footer>
+</div>
+<div class="toast-region" id="toasts" role="status" aria-live="polite"></div>
+<script src="/app.js"></script></body></html>
