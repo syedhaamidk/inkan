@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
@@ -45,7 +45,6 @@ Inkan lets you play every role in that story, in the browser, with real cryptogr
                └──────────── "do I already trust this seal?" ◄───────────────┘
 ```
 
-Built for **Cryptography CA3** (Network Security: PKI, TLS/SSL).
 
 <br>
 
