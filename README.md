@@ -1,4 +1,4 @@
-# Inkan: a pocket certificate authority (Cryptography CA3)
+# Inkan: a pocket certificate authority 
 
 Flask backend plus a themed frontend. Create a CA, issue a certificate, check it the way a browser does,
 and run real TLS handshakes that succeed or fail for five reasons.
