@@ -31,3 +31,6 @@ app.py (API) · pki.py (CA and issuing) · server.py / client.py (TLS) · lab.py
 ## Limits
 Stateless by design: nothing is stored on the server, and keys are returned to the browser for practice use only.
 No login, rate limiting or revocation (CRL/OCSP). Add rate limiting (for example Flask-Limiter) before public use.
+
+## License
+MIT, see [LICENSE](LICENSE).
